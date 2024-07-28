@@ -1,7 +1,10 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
+	db "glinboy.com/gin-crud-rest-api-demo/db"
 )
 
 func InitRouter() *gin.Engine {
@@ -13,4 +16,25 @@ func InitRouter() *gin.Engine {
 	r.DELETE("/movies/:id", deleteMovie)
 
 	return r
+}
+
+func postMovie(ctx *gin.Context) {
+	var movie db.Movie
+	err := ctx.Bind(&movie)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	res, err := db.CreateMovie(&movie)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusCreated, gin.H{
+		"movie": res,
+	})
 }
