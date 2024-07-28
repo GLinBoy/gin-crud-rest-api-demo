@@ -65,3 +65,12 @@ func GetMovie(id string) (*Movie, error) {
 	}
 	return &movie, nil
 }
+
+func UpdateMovie(movie *Movie) (*Movie, error) {
+	var movieToUpdate Movie
+	result := db.Model(&movieToUpdate).Where("id = ?", movie.ID).Update(movie)
+	if result.RowsAffected == 0 {
+		return &movieToUpdate, errors.New("movie not updated")
+	}
+	return movie, nil
+}
