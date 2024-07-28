@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/joho/godotenv"
@@ -44,4 +45,13 @@ func InitPostgresDB() {
 		log.Fatal(err)
 	}
 	db.AutoMigrate(Movie{})
+}
+
+func CreateMovie(movie *Movie) (*Movie, error) {
+	movie.ID = uuid.New().String()
+	res := db.Create(&movie)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	return movie, nil
 }
