@@ -74,3 +74,12 @@ func UpdateMovie(movie *Movie) (*Movie, error) {
 	}
 	return movie, nil
 }
+
+func DeleteMovie(id string) error {
+	var deletedMovie Movie
+	result := db.Where("id = ?", id).Delete(&deletedMovie)
+	if result.RowsAffected == 0 {
+		return errors.New("movie not deleted")
+	}
+	return nil
+}
