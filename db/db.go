@@ -1,6 +1,7 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -54,4 +55,13 @@ func CreateMovie(movie *Movie) (*Movie, error) {
 		return nil, res.Error
 	}
 	return movie, nil
+}
+
+func GetMovie(id string) (*Movie, error) {
+	var movie Movie
+	res := db.First(&movie, "id = ?", id)
+	if res.RowsAffected == 0 {
+		return nil, errors.New(fmt.Sprintf("movie of id %s not found", id))
+	}
+	return &movie, nil
 }
