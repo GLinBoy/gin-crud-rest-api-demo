@@ -66,6 +66,15 @@ func GetMovie(id string) (*Movie, error) {
 	return &movie, nil
 }
 
+func GetMovies() ([]*Movie, error) {
+	var movies []*Movie
+	res := db.Find(&movies)
+	if res.Error != nil {
+		return nil, errors.New("no movies found")
+	}
+	return movies, nil
+}
+
 func UpdateMovie(movie *Movie) (*Movie, error) {
 	var movieToUpdate Movie
 	result := db.Model(&movieToUpdate).Where("id = ?", movie.ID).Update(movie)
