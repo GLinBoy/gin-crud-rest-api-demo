@@ -96,3 +96,17 @@ func putMovie(ctx *gin.Context) {
 		"task": res,
 	})
 }
+
+func deleteMovie(ctx *gin.Context) {
+	id := ctx.Param("id")
+	err := db.DeleteMovie(id)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "task deleted successfully",
+	})
+}
