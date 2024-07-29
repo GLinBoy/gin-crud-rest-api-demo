@@ -65,3 +65,34 @@ func getMovie(ctx *gin.Context) {
 		"movie": res,
 	})
 }
+
+func putMovie(ctx *gin.Context) {
+	var updatedMovie db.Movie
+	err := ctx.Bind(&updatedMovie)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	id := ctx.Param("id")
+	dbMovie, err := db.GetMovie(id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	dbMovie.Name = updatedMovie.Name
+	dbMovie.Description = updatedMovie.Description
+	res, err := db.UpdateMovie(dbMovie)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"task": res,
+	})
+}
