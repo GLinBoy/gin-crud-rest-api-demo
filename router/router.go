@@ -51,3 +51,17 @@ func getMovies(ctx *gin.Context) {
 		"movies": res,
 	})
 }
+
+func getMovie(ctx *gin.Context) {
+	id := ctx.Param("id")
+	res, err := db.GetMovie(id)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"movie": res,
+	})
+}
