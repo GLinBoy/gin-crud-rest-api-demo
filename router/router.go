@@ -38,3 +38,16 @@ func postMovie(ctx *gin.Context) {
 		"movie": res,
 	})
 }
+
+func getMovies(ctx *gin.Context) {
+	res, err := db.GetMovies()
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"movies": res,
+	})
+}
